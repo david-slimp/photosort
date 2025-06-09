@@ -116,3 +116,4 @@ windsurf-workspace.json
 .tern-port
 .vscode-test/
 
+.env/
