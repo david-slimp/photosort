@@ -1,1 +1,68 @@
-initial
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Photos Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #authorize_button, #signout_button { margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Google Photos Albums</h1>
+  <button id="authorize_button">Sign In</button>
+  <button id="signout_button" style="display:none">Sign Out</button>
+  <ul id="albums"></ul>
+
+  <script>
+    const CLIENT_ID = 'YOUR_CLIENT_ID_HERE';
+    const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
+
+    function initClient() {
+      gapi.client.init({
+        clientId: CLIENT_ID,
+        scope: SCOPES
+      }).then(() => {
+        const auth = gapi.auth2.getAuthInstance();
+        auth.isSignedIn.listen(updateSigninStatus);
+        document.getElementById('authorize_button').onclick = () => auth.signIn();
+        document.getElementById('signout_button').onclick = () => auth.signOut();
+        updateSigninStatus(auth.isSignedIn.get());
+      });
+    }
+
+    function updateSigninStatus(isSignedIn) {
+      const auth = gapi.auth2.getAuthInstance();
+      if (isSignedIn) {
+        document.getElementById('authorize_button').style.display = 'none';
+        document.getElementById('signout_button').style.display = 'inline';
+        listAlbums();
+      } else {
+        document.getElementById('authorize_button').style.display = 'inline';
+        document.getElementById('signout_button').style.display = 'none';
+        document.getElementById('albums').innerHTML = '';
+      }
+    }
+
+    function listAlbums(pageToken) {
+      gapi.client.request({
+        path: 'https://photoslibrary.googleapis.com/v1/albums',
+        params: {pageSize: 50, pageToken: pageToken}
+      }).then(response => {
+        const albums = response.result.albums || [];
+        const list = document.getElementById('albums');
+        for (const album of albums) {
+          const li = document.createElement('li');
+          li.textContent = album.title;
+          list.appendChild(li);
+        }
+        if (response.result.nextPageToken) {
+          listAlbums(response.result.nextPageToken);
+        }
+      }, err => console.error(err));
+    }
+  </script>
+  <script async defer src="https://apis.google.com/js/api.js"
+          onload="gapi.load('client:auth2', initClient)"></script>
+</body>
+</html>
