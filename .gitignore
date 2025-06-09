@@ -1,9 +1,4 @@
 # ======================
-# Configuration
-# ======================
-config/config.js
-
-# ======================
 # OS-Specific (Linux)
 # ======================
 drafts/
@@ -79,9 +74,12 @@ web_modules/
 # ======================
 # Configuration / Environment
 # ======================
+.env/*.js
 .env
 .env.*
 !.env.example
+!.env/example*.js
+!.env/*.example
 .yarn-integrity
 
 # ======================
@@ -115,5 +113,3 @@ windsurf-workspace.json
 .dynamodb/
 .tern-port
 .vscode-test/
-
-.env/
