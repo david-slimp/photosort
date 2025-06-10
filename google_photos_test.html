@@ -60,12 +60,6 @@
     }
     
     // Function to check if both libraries are loaded
-    function maybeEnableButtons() {
-      if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
-      }
-    }
-
     async function initializeGapiClient() {
       try {
         // Initialize the Google API client
@@ -96,6 +90,7 @@
         if (resp.error !== undefined) {
           throw (resp);
         }
+        gapi.client.setToken({access_token: resp.access_token});
         document.getElementById('signout_button').style.display = 'inline';
         document.getElementById('authorize_button').innerText = 'Refresh';
         await listAlbums();
@@ -120,16 +115,11 @@
       }
     }
 
-    // Load the API client and auth2 library
-    document.addEventListener('DOMContentLoaded', function() {
-      // Set up click listeners
-      document.getElementById('authorize_button').onclick = handleAuthClick;
-      document.getElementById('signout_button').onclick = handleSignoutClick;
-      
-      // Initialize the Google API client and auth2 library
-      gapiLoaded();
-      gisLoaded();
-    });
+      // Set up button listeners once the DOM is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('authorize_button').onclick = handleAuthClick;
+        document.getElementById('signout_button').onclick = handleSignoutClick;
+      });
 
     // Function to list albums
     async function listAlbums(pageToken) {
