@@ -18,8 +18,6 @@ repository.
    python3 -m http.server 8080
    ```
 4. Open `http://localhost:8080/google_photos_test.html` in your browser.
-=======
 
-
-The `.env` directory is ignored by Git, keeping your private client ID
-out of version control.
+The `.env` directory is ignored by Git, keeping your private client ID out of
+version control.

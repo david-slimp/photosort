@@ -1,0 +1,14 @@
+body { font-family: Arial, sans-serif; }
+#authorize_button, #signout_button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+#albums {
+  margin-top: 20px;
+}
+.album {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
